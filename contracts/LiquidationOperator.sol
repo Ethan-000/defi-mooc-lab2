@@ -137,6 +137,23 @@ contract LiquidationOperator is IUniswapV2Callee {
 
     // TODO: define constants used in the contract including ERC-20 tokens, Uniswap Pairs, Aave lending pools, etc. */
     //    *** Your code here ***
+
+    // 0. optional
+    // add immutable owner to the contract which can be intialized through contract creation
+
+    // a. add WBRC USDT WETH tokens with IERC20 interface and their addresses
+
+    // b. add Uniswap V2 Factory and Pair of tokens (WETH_USDT, WBTC_WETH)
+    //   with their addresses and interface
+
+    // c. add aave lending pool
+
+    // d. add address of the target
+
+    // NOTE:
+    //    a. if to situmulate the original liquidation on chain, one could add USDC and use Curve
+    //    b. another alternative is to use Sushiswap V2 Factory which may result in a larger profit.
+
     // END TODO
 
     // some helper function, it is totally fine if you can finish the lab without using these function
@@ -180,33 +197,46 @@ contract LiquidationOperator is IUniswapV2Callee {
     constructor() {
         // TODO: (optional) initialize your contract
         //   *** Your code here ***
+        // 0. optional
+        // could add the owner of the contract here.
         // END TODO
     }
 
     // TODO: add a `receive` function so that you can withdraw your WETH
     //   *** Your code here ***
+    function receive_token(address token) public returns (bool) {
+        // 0. can add a only owner modifer
+        // a.
+        // use transfer send or call function
+        // see difference here
+        // https://medium.com/coinmonks/solidity-transfer-vs-send-vs-call-function-64c92cfc878a
+    }
+
     // END TODO
 
     // required by the testing script, entry for your liquidation call
     function operate() external {
         // TODO: implement your liquidation logic
-
         // 0. security checks and initializing variables
         //    *** Your code here ***
-
         // 1. get the target user account data & make sure it is liquidatable
         //    *** Your code here ***
-
+        // a. use getUserAccountData of aave lending pool defined above to get
+        // health factor
+        // b. check health factor is less than 1.
+        // notice the unit is different so may need conversion.
         // 2. call flash swap to liquidate the target user
         // based on https://etherscan.io/tx/0xac7df37a43fab1b130318bbb761861b8357650db2e2c6493b73d6da3d9581077
         // we know that the target user borrowed USDT with WBTC as collateral
         // we should borrow USDT, liquidate the target user and get the WBTC, then swap WBTC to repay uniswap
         // (please feel free to develop other workflows as long as they liquidate the target user successfully)
         //    *** Your code here ***
-
+        // a. call the swap function to excute liquidation
         // 3. Convert the profit into ETH and send back to sender
         //    *** Your code here ***
-
+        // a.
+        // use withdraw function of weth to convert the profit into ETH
+        // withdraw use the receive function or other procedure
         // END TODO
     }
 
@@ -218,19 +248,23 @@ contract LiquidationOperator is IUniswapV2Callee {
         bytes calldata
     ) external override {
         // TODO: implement your liquidation logic
-
         // 2.0. security checks and initializing variables
         //    *** Your code here ***
-
+        // a. get the reserves of each pair of tokens with getReserve() function.
+        // ensure that msg.sender is a V2 pair
+        // rest of the function goes here!
         // 2.1 liquidate the target user
         //    *** Your code here ***
-
+        // a. call the liquidationCall function of the lending pool
+        // remember to approve USDT to the lending pool
         // 2.2 swap WBTC for other things or repay directly
         //    *** Your code here ***
-
+        // a. get the amount of WBTC of this contract
+        // b. swap WBTC to for WETH
         // 2.3 repay
         //    *** Your code here ***
-        
+        // a. calculate the amount need to repay with getAmountIn() function
+        // b. transfer the amount to the pair
         // END TODO
     }
 }
