@@ -2,7 +2,7 @@
 # Introduction
 
 This is a lab exercise for the defi mooc. 
-I've added detailed comment (but no explicit) on how to solve the exercise.
+I've added detailed comment (but no explicit code) on how to solve the exercise.
 Feel free to give it a try.
 
 # Hands-on Exercise: Flash Loan based Liquidation
